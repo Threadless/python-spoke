@@ -1,3 +1,5 @@
+from lxml import etree
+
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError']
 
 # Validation code
@@ -194,6 +196,48 @@ class Spoke(object):
             Logo       = Optional(Image),
         )
         self.__dict__ = kwargs
+
+    def _generate_tree(self, tag_name, serializers, node):
+        if isinstance(node, list):
+            elements = etree.Element(tag_name)
+            for child in node:
+                # XXX hardcoded tag_name
+                elements.append(self._generate_tree('CaseInfo', serializers, child))
+            return elements
+        elif isinstance(node, dict):
+            parent = etree.Element(tag_name)
+
+            for tag_name, subtree in node.iteritems():
+                parent.append(self._generate_tree(tag_name, serializers, subtree))
+            return parent
+        elif type(node) in serializers:
+            serializer = serializers[type(node)]
+            return serializer(tag_name, node)
+        else:
+            element      = etree.Element(tag_name)
+            element.text = str(node)
+            return element
+
+    def _generate_request(self, RequestType, Order):
+        def serialize_it(tag_name, value):
+            return self._generate_tree(tag_name, serializers, value.__dict__)
+
+        serializers = {
+            Case               : serialize_it,
+            Image              : serialize_it,
+            OrderInfo          : serialize_it,
+            Comment            : serialize_it,
+            PackSlipCustomInfo : serialize_it,
+            Prices             : serialize_it,
+        }
+
+        request = self._generate_tree('Request', serializers, dict(
+            Customer    = self.Customer,
+            RequestType = RequestType,
+            Key         = self.Key,
+            Order       = Order,
+        ))
+        return etree.tostring(request, pretty_print=True)
 
     def new(self, **kwargs):
         _validate(kwargs,
