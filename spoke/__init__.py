@@ -86,6 +86,7 @@ class Image(object):
             ImageType = Required(),
             Url       = Required(),
         )
+        self.__dict__ = kwargs
 
 
 class Comment(object):
@@ -98,6 +99,7 @@ class Comment(object):
             Type        = Required(Enum('Printer', 'Packaging')),
             CommentText = Required(),
         )
+        self.__dict__ = kwargs
 
 
 class PackSlipCustomInfo(object):
@@ -114,6 +116,7 @@ class PackSlipCustomInfo(object):
             Text5 = Optional(),
             Text6 = Optional(),
         )
+        self.__dict__ = kwargs
 
 
 class Prices(object):
@@ -128,6 +131,7 @@ class Prices(object):
             ShippingCents        = Optional(),
             DiscountCents        = Optional(),
         )
+        self.__dict__ = kwargs
 
 
 class OrderInfo(object):
@@ -154,6 +158,7 @@ class OrderInfo(object):
             ShippingLabelReference2 = Optional(),
 
         )
+        self.__dict__ = kwargs
 
 
 class Case(object):
@@ -173,6 +178,7 @@ class Case(object):
             DiscountCents  = Optional(),
             Comments       = Optional(Array(Comment)),
         )
+        self.__dict__ = kwargs
 
 
 class Spoke(object):
@@ -187,6 +193,7 @@ class Spoke(object):
             Key        = Required(),
             Logo       = Optional(Image),
         )
+        self.__dict__ = kwargs
 
     def new(self, **kwargs):
         _validate(kwargs,
