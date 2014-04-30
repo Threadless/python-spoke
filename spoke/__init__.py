@@ -240,6 +240,13 @@ class Spoke(object):
         return etree.tostring(request, pretty_print=True)
 
     def new(self, **kwargs):
+        shipping_method_map = dict(
+            FirstClass      = 'FC',
+            PriorityMail    = 'PM',
+            TrackedDelivery = 'TD',
+            SecondDay       = 'SD',
+            Overnight       = 'ON',
+        )
         _validate(kwargs,
             OrderId        = Required(), # XXX number
             ShippingMethod = Required(Enum('FirstClass', 'PriorityMail', 'TrackedDelivery', 'SecondDay', 'Overnight')),
@@ -248,6 +255,12 @@ class Spoke(object):
             OrderInfo      = Required(OrderInfo),
             Cases          = Required(Array(Case)),
         )
+        kwargs['ShippingMethod'] = shipping_method_map[ kwargs['ShippingMethod'] ]
+
+        request = self._generate_request(
+            RequestType = 'New',
+            Order       = kwargs,
+        )
 
     def update(self, **kwargs):
         _validate(kwargs,
@@ -255,5 +268,13 @@ class Spoke(object):
             OrderInfo = Required(OrderInfo)
         )
 
+        request = self._generate_request(
+            RequestType = 'Update',
+            Order       = kwargs,
+        )
+
     def cancel(self, OrderId):
-        pass
+        request = self._generate_request(
+            RequestType = 'Cancel',
+            Order       = dict(OrderId = OrderId),
+        )
