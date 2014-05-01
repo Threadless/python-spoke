@@ -1,6 +1,8 @@
 from lxml import etree
+import requests
+from StringIO import StringIO
 
-__all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError']
+__all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
 # Validation code
 
@@ -182,6 +184,9 @@ class Case(object):
         )
         self.__dict__ = kwargs
 
+
+class SpokeError(Exception):
+    pass
 
 class Spoke(object):
     '''
