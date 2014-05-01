@@ -188,6 +188,12 @@ class Case(object):
 class SpokeError(Exception):
     pass
 
+
+ARRAY_CHILDREN_NAMES = dict(
+    Cases    = 'CaseInfo',
+    Comments = 'Comment',
+)
+
 class Spoke(object):
     '''
         The main spoke requestor object
@@ -206,8 +212,7 @@ class Spoke(object):
         if isinstance(node, list):
             elements = etree.Element(tag_name)
             for child in node:
-                # XXX hardcoded tag_name
-                elements.append(self._generate_tree('CaseInfo', serializers, child))
+                elements.append(self._generate_tree(ARRAY_CHILDREN_NAMES[tag_name], serializers, child))
             return elements
         elif isinstance(node, dict):
             parent = etree.Element(tag_name)
