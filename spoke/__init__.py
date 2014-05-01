@@ -285,6 +285,9 @@ class Spoke(object):
             Order       = kwargs,
         )
 
+        return self._send_request(request)
+
+
     def update(self, **kwargs):
         _validate(kwargs,
             OrderId   = Required(), # XXX number
@@ -296,8 +299,13 @@ class Spoke(object):
             Order       = kwargs,
         )
 
+        return self._send_request(request)
+
+
     def cancel(self, OrderId):
         request = self._generate_request(
             RequestType = 'Cancel',
             Order       = dict(OrderId = OrderId),
         )
+
+        return self._send_request(request)
