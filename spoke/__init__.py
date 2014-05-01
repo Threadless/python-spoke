@@ -244,6 +244,24 @@ class Spoke(object):
         ))
         return etree.tostring(request, pretty_print=True)
 
+    def _send_request(self, request):
+        if self.production:
+            url = 'http://api.spokecustom.com/order/submit'
+        else:
+            url = 'http://api-staging.spokecustom.com/order/submit'
+        res = requests.post(url, data=request)
+        res.raise_for_status()
+        res    = res.content
+        tree   = etree.parse(StringIO(res))
+        result = tree.xpath('//result')[0].text
+
+        if result == 'Success':
+            immc_id = int(tree.xpath('//immc_id')[0].text)
+            return dict(immc_id = immc_id)
+        else:
+            message = tree.xpath('//message')[0].text
+            raise SpokeError(message)
+
     def new(self, **kwargs):
         shipping_method_map = dict(
             FirstClass      = 'FC',
