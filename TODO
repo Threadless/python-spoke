@@ -5,3 +5,4 @@ tox
 test coverage
 voluptuous instead of hand-rolled validation
 break apart into different packages
+migrate to setup tools
