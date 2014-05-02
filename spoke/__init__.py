@@ -5,7 +5,6 @@
 
 from lxml import etree
 import requests
-from StringIO import StringIO
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -353,7 +352,7 @@ class Spoke(object):
 
     def _send_request(self, request):
         res    = self.transport.send(request)
-        tree   = etree.parse(StringIO(res))
+        tree   = etree.fromstring(res)
         result = tree.xpath('//result')[0].text
 
         if result == 'Success':
