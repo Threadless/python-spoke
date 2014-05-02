@@ -256,11 +256,22 @@ class SpokeError(Exception):
     '''
     pass
 
+class Transport(object):
+    def __init__(self, url):
+        self.url = url
+
+    def send(self, request):
+        res = requests.post(url, data=request)
+        res.raise_for_status()
+        return res.content
 
 ARRAY_CHILDREN_NAMES = dict(
     Cases    = 'CaseInfo',
     Comments = 'Comment',
 )
+
+PRODUCTION_URL = 'http://api.spokecustom.com/order/submit'
+STAGING_URL    = 'http://api-staging.spokecustom.com/order/submit'
 
 class Spoke(object):
     '''
@@ -273,6 +284,7 @@ class Spoke(object):
             The following fields are required:
 
             production
+            transport
             Customer
             Key
 
@@ -282,11 +294,21 @@ class Spoke(object):
         '''
         _validate(kwargs,
             production = Required(),
+            transport  = Optional(),
             Customer   = Required(),
             Key        = Required(),
             Logo       = Optional(Image),
         )
         self.__dict__ = kwargs
+        self.transport = self._create_transport()
+
+    def _create_transport(self):
+        if hasattr(self, 'transport'):
+            return self.transport
+        elif self.production:
+            return Transport(PRODUCTION_URL)
+        else:
+            return Transport(STAGING_URL)
 
     def _generate_tree(self, tag_name, serializers, node):
         if isinstance(node, list):
@@ -330,13 +352,7 @@ class Spoke(object):
         return etree.tostring(request, pretty_print=True)
 
     def _send_request(self, request):
-        if self.production:
-            url = 'http://api.spokecustom.com/order/submit'
-        else:
-            url = 'http://api-staging.spokecustom.com/order/submit'
-        res = requests.post(url, data=request)
-        res.raise_for_status()
-        res    = res.content
+        res    = self.transport.send(request)
         tree   = etree.parse(StringIO(res))
         result = tree.xpath('//result')[0].text
 
