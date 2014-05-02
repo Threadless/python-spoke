@@ -192,3 +192,11 @@ result = s.new(
 The documentation for the API itself can be found here:
 
 ***API DOCS GO HERE***
+
+# Conventions
+
+Upper-case keyword arguments are passed directly to the API; lower-case ones
+fiddle with the library's configuration.  Strings or numbers may be used.
+Date objects may be specified for OrderDate, and instead of the two-character
+shorthand specified by the API, ShippingMethod may be specified as a more human
+readable string.

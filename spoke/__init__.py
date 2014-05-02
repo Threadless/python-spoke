@@ -1,3 +1,8 @@
+'''
+    Python interface to the Spoke API.  This is the reference documentation; see
+    the included README for a higher level overview.
+'''
+
 from lxml import etree
 import requests
 from io import StringIO
@@ -7,6 +12,9 @@ __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke
 # Validation code
 
 class ValidationError(Exception):
+    '''
+        An exception that represents the case that parameter validation failed.
+    '''
     pass
 
 
@@ -82,10 +90,13 @@ def _validate(d, **validation_spec):
 
 class Image(object):
     '''
-
+        Represents an image resource.  Use for PrintImage, QcImage, Logo, and PackSlip.
     '''
 
     def __init__(self, **kwargs):
+        '''
+            Requires: ImageType, Url
+        '''
         _validate(kwargs,
             ImageType = Required(),
             Url       = Required(),
@@ -95,10 +106,13 @@ class Image(object):
 
 class Comment(object):
     '''
-
+        Represents a comment.  Used for comments on Case objects.
     '''
 
     def __init__(self, **kwargs):
+        '''
+            Requires: Type (one of 'Printer', 'Packaging'), CommentText
+        '''
         _validate(kwargs,
             Type        = Required(Enum('Printer', 'Packaging')),
             CommentText = Required(),
@@ -108,10 +122,13 @@ class Comment(object):
 
 class PackSlipCustomInfo(object):
     '''
-
+        Represents custom information for a pack slip.
     '''
 
     def __init__(self, **kwargs):
+        '''
+            May take parameters Text1 - Text6.
+        '''
         _validate(kwargs,
             Text1 = Optional(),
             Text2 = Optional(),
@@ -125,9 +142,13 @@ class PackSlipCustomInfo(object):
 
 class Prices(object):
     '''
+        Specifies pricing data.
     '''
 
     def __init__(self, **kwargs):
+        '''
+            May specify DisplayOnPackingSlip, CurrencySymbol, TaxCents, ShippingCents, DiscountCents
+        '''
         _validate(kwargs,
             DisplayOnPackingSlip = Optional(),
             CurrencySymbol       = Optional(),
@@ -140,9 +161,33 @@ class Prices(object):
 
 class OrderInfo(object):
     '''
+        Specifies order information.
     '''
 
     def __init__(self, **kwargs):
+        '''
+            The following parameters are required:
+
+            FirstName
+            LastName
+            Address1
+            City
+            State
+            PostalCode
+            CountryCode
+            OrderDate
+            PhoneNumber
+
+            The following parameters are optional:
+
+            Address2
+            PurchaseOrderNumber
+            GiftMessage
+            PackSlipCustomInfo
+            Prices
+            ShippingLabelReference1
+            ShippingLabelReference2
+        '''
         _validate(kwargs,
             FirstName               = Required(),
             LastName                = Required(),
@@ -166,7 +211,27 @@ class OrderInfo(object):
 
 
 class Case(object):
+    '''
+        A case represents a phone or tablet cover in the order.
+    '''
     def __init__(self, **kwargs):
+        '''
+            The following parameters are required:
+
+            CaseId
+            CaseType
+            Quantity
+            PrintImage
+
+            The following parameters are optional:
+
+            QcImage
+            Prices
+            CurrencySymbol
+            RetailCents
+            DiscountCents
+            Comments
+        '''
         _validate(kwargs,
             CaseId         = Required(),
             CaseType       = Required(Enum('ph4bt', 'iph4tough', 'iph4vibe', 'iph3bt',
@@ -186,6 +251,9 @@ class Case(object):
 
 
 class SpokeError(Exception):
+    '''
+        Represents an error received from the spoke API.
+    '''
     pass
 
 
@@ -196,10 +264,22 @@ ARRAY_CHILDREN_NAMES = dict(
 
 class Spoke(object):
     '''
-        The main spoke requestor object
+        The main spoke request object.  It contains any
+        request parameters that won't change between requests.
     '''
 
     def __init__(self, **kwargs):
+        '''
+            The following fields are required:
+
+            production
+            Customer
+            Key
+
+            The following fields are optional:
+
+            Logo
+        '''
         _validate(kwargs,
             production = Required(),
             Customer   = Required(),
@@ -268,6 +348,25 @@ class Spoke(object):
             raise SpokeError(message)
 
     def new(self, **kwargs):
+        '''
+            The following fields are required:
+
+            OrderId
+            ShippingMethod
+            OrderInfo
+            Cases
+
+            The following fields are optional:
+
+            PackSlip
+            Comments
+
+            Throws an exception if the parameters don't validate
+
+            Returns a dictionary of data.  It contains (at least) the following key-value pairs:
+
+            immc_id
+        '''
         shipping_method_map = dict(
             FirstClass      = 'FC',
             PriorityMail    = 'PM',
@@ -284,6 +383,7 @@ class Spoke(object):
             Cases          = Required(Array(Case)),
         )
         kwargs['ShippingMethod'] = shipping_method_map[ kwargs['ShippingMethod'] ]
+        # XXX OrderDate (date or datetime?)
 
         request = self._generate_request(
             RequestType = 'New',
@@ -294,6 +394,9 @@ class Spoke(object):
 
 
     def update(self, **kwargs):
+        '''
+            Both OrderId and OrderInfo are required.
+        '''
         _validate(kwargs,
             OrderId   = Required(), # XXX number
             OrderInfo = Required(OrderInfo)
@@ -308,6 +411,10 @@ class Spoke(object):
 
 
     def cancel(self, OrderId):
+        '''
+            OrderId is the self-assigned order ID that corresponds
+            to your order.
+        '''
         request = self._generate_request(
             RequestType = 'Cancel',
             Order       = dict(OrderId = OrderId),
