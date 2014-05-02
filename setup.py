@@ -13,5 +13,5 @@ setup(
     url              = 'https://github.com/Threadless/python-spoke',
     keywords         = 'spoke',
     install_requires = ['lxml==3.3.5', 'requests==2.2.1'],
-    tests_require    = ['unittest2==0.5.1', 'nose==1.3.1', 'python-termstyle==0.1.10', 'rednose==0.4.1'],
+    tests_require    = ['nose==1.3.1', 'python-termstyle==0.1.10', 'rednose==0.4.1'],
 )

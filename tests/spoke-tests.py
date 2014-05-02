@@ -1,5 +1,5 @@
 import spoke
-import unittest2
+import unittest
 from datetime import datetime
 
 CUSTOMER_NAME   = 'abc123'
@@ -12,7 +12,7 @@ FAUXN_NUMBER    = '555 555 5555'
 FAUX_ZIP        = '12345'
 FAUX_STATE      = 'IL'
 
-class SpokeTests(unittest2.TestCase):
+class SpokeTests(unittest.TestCase):
     def test_constructor_required_fields(self):
         params = dict(
             Customer   = CUSTOMER_NAME,
