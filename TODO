@@ -1,7 +1,6 @@
 pypy, py3k support
 docs
 better tests
-tox
 test coverage
 voluptuous instead of hand-rolled validation
 break apart into different packages
