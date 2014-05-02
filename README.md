@@ -11,7 +11,7 @@ omitted from each call; for example:
 API XML:
 
 ```xml
-<?xml version="1.0" encoding="utf&#194;&#173;8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Request>
 <Customer>CustomerName</Customer>
 <RequestType>New</RequestType>
@@ -43,7 +43,7 @@ API XML:
     <PostalCode>30084</PostalCode>
     <CountryCode>US</CountryCode>
     <OrderDate>11/08/2011</OrderDate>
-    <PhoneNumber>404&#194;&#173;555&#194;&#173;9000</PhoneNumber>
+    <PhoneNumber>404-555-9000</PhoneNumber>
     <PurchaseOrderNumber>PO</PurchaseOrderNumber>
     <GiftMessage>Thanks for your purchase!</GiftMessage>
     <PackSlipCustomInfo>
