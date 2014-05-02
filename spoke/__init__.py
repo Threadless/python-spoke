@@ -1,6 +1,6 @@
 from lxml import etree
 import requests
-from StringIO import StringIO
+from io import StringIO
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -66,13 +66,13 @@ class Enum(Validator):
 
 
 def _validate(d, **validation_spec):
-    for k, v in d.iteritems():
+    for k, v in d.items():
         validator = validation_spec.pop(k, None)
         if validator is None:
             raise ValidationError('parameter "%s" not allowed' % k)
         d[k] = validator(v)
 
-    validation_spec = dict((k, v) for k, v in validation_spec.iteritems() if v.is_required)
+    validation_spec = dict((k, v) for k, v in validation_spec.items() if v.is_required)
     if validation_spec:
         first_key = sorted(validation_spec.keys())[0]
         raise ValidationError('Missing required parameter "%s"' % first_key)
@@ -217,7 +217,7 @@ class Spoke(object):
         elif isinstance(node, dict):
             parent = etree.Element(tag_name)
 
-            for tag_name, subtree in node.iteritems():
+            for tag_name, subtree in node.items():
                 parent.append(self._generate_tree(tag_name, serializers, subtree))
             return parent
         elif type(node) in serializers:

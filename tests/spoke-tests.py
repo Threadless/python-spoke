@@ -20,7 +20,7 @@ class SpokeTests(unittest.TestCase):
             production = False,
         )
 
-        for k in params.iterkeys():
+        for k in params.keys():
             copy = params.copy()
             del copy[k]
 
@@ -80,7 +80,7 @@ class SpokeTests(unittest.TestCase):
             ShippingMethod = 'FirstClass',
         )
 
-        for k in params.iterkeys():
+        for k in params.keys():
             copy = params.copy()
             del copy[k]
 
@@ -192,7 +192,7 @@ class SpokeTests(unittest.TestCase):
             ),
         )
 
-        for k in params.iterkeys():
+        for k in params.keys():
             copy = params.copy()
             del copy[k]
             self.assertRaises(spoke.ValidationError, sp.update, **copy)
