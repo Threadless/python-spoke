@@ -12,6 +12,16 @@ FAUXN_NUMBER    = '555 555 5555'
 FAUX_ZIP        = '12345'
 FAUX_STATE      = 'IL'
 
+class FauxTransport(object):
+    def send(self, request):
+        return '''<?xml version="1.0" encoding="utf-8" ?>
+<ResponseSuccess>
+  <result>Success</result>
+  <time>11/10/2011 03:50:28 -05:00</time>
+  <immc_id>12345</immc_id>
+</ResponseSuccess>'''
+
+
 class SpokeTests(unittest.TestCase):
     def test_constructor_required_fields(self):
         params = dict(
@@ -53,6 +63,7 @@ class SpokeTests(unittest.TestCase):
             Customer   = CUSTOMER_NAME,
             Key        = CUSTOMER_KEY,
             production = False,
+            transport  = FauxTransport(),
         )
 
         params = dict(
@@ -92,6 +103,7 @@ class SpokeTests(unittest.TestCase):
             Customer   = CUSTOMER_NAME,
             Key        = CUSTOMER_KEY,
             production = False,
+            transport  = FauxTransport(),
         )
 
         sp.new(
@@ -133,6 +145,7 @@ class SpokeTests(unittest.TestCase):
             Customer   = CUSTOMER_NAME,
             Key        = CUSTOMER_KEY,
             production = False,
+            transport  = FauxTransport(),
         )
 
         self.assertRaises(spoke.ValidationError, sp.new,
@@ -175,6 +188,7 @@ class SpokeTests(unittest.TestCase):
             Customer   = CUSTOMER_NAME,
             Key        = CUSTOMER_KEY,
             production = False,
+            transport  = FauxTransport(),
         )
 
         params = dict(
@@ -203,6 +217,7 @@ class SpokeTests(unittest.TestCase):
             Customer   = CUSTOMER_NAME,
             Key        = CUSTOMER_KEY,
             production = False,
+            transport  = FauxTransport(),
         )
 
         self.assertRaises(spoke.ValidationError, sp.update,
@@ -220,3 +235,4 @@ class SpokeTests(unittest.TestCase):
             ),
             Extra = 'foo',
         )
+
