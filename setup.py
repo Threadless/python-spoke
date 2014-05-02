@@ -1,3 +1,4 @@
+import os
 from setuptools import setup, find_packages
 
 setup(
@@ -5,6 +6,7 @@ setup(
     version          = '0.1',
     packages         = find_packages(),
     description      = 'API bindings for Spoke API',
+    long_description = open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r').read(),
     license          = 'MIT',
     author           = 'Rob Hoelz',
     author_email     = 'rob.hoelz@skinnycorp.com',
