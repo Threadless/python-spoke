@@ -5,7 +5,7 @@
 
 from lxml import etree
 import requests
-from io import StringIO
+from StringIO import StringIO
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
