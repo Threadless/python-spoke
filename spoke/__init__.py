@@ -89,12 +89,15 @@ def _validate(d, **validation_spec):
 
 class Image(object):
     '''
-        Represents an image resource.  Use for PrintImage, QcImage, Logo, and PackSlip.
+        Represents an image resource.  Used for PrintImage, QcImage, Logo, and PackSlip.
     '''
 
     def __init__(self, **kwargs):
         '''
-            Requires: ImageType, Url
+            Required parameters:
+
+            ImageType - The type of image referenced (ex. jpg, png, etc)
+            Url       - The URL of the image referenced.
         '''
         _validate(kwargs,
             ImageType = Required(),
@@ -110,7 +113,10 @@ class Comment(object):
 
     def __init__(self, **kwargs):
         '''
-            Requires: Type (one of 'Printer', 'Packaging'), CommentText
+            Required parameters:
+
+            Type        - One of 'Printer', 'Packaging'
+            CommentText - The actual comment text
         '''
         _validate(kwargs,
             Type        = Required(Enum('Printer', 'Packaging')),
@@ -126,7 +132,14 @@ class PackSlipCustomInfo(object):
 
     def __init__(self, **kwargs):
         '''
-            May take parameters Text1 - Text6.
+            Optional parameters:
+
+            Text1
+            Text2
+            Text3
+            Text4
+            Text5
+            Text6
         '''
         _validate(kwargs,
             Text1 = Optional(),
@@ -146,10 +159,16 @@ class Prices(object):
 
     def __init__(self, **kwargs):
         '''
-            May specify DisplayOnPackingSlip, CurrencySymbol, TaxCents, ShippingCents, DiscountCents
+            Optional parameters:
+
+            DisplayOnPackingSlip - Whether or not to show prices on the packing slip
+            CurrencySymbol       - The symbol for the currency used
+            TaxCents             - The tax price, expressed in cents
+            ShippingCents        - The shipping price, expressed in cents
+            DiscountCents        - The discount price (if any), expressed in cents
         '''
         _validate(kwargs,
-            DisplayOnPackingSlip = Optional(),
+            DisplayOnPackingSlip = Optional(Enum('Yes', 'No')),
             CurrencySymbol       = Optional(),
             TaxCents             = Optional(),
             ShippingCents        = Optional(),
@@ -171,19 +190,19 @@ class OrderInfo(object):
             LastName
             Address1
             City
-            State
+            State - If the given country doesn't have states/provinces, send the city
             PostalCode
             CountryCode
-            OrderDate
+            OrderDate - May be a datetime.datetime object
             PhoneNumber
 
             The following parameters are optional:
 
             Address2
-            PurchaseOrderNumber
+            PurchaseOrderNumber - internal PO number
             GiftMessage
-            PackSlipCustomInfo
-            Prices
+            PackSlipCustomInfo - A PackSlipCustomInfo object
+            Prices - A Prices object
             ShippingLabelReference1
             ShippingLabelReference2
         '''
@@ -282,13 +301,13 @@ class Spoke(object):
         '''
             The following fields are required:
 
-            production
-            transport
-            Customer
-            Key
+            production - Whether or not to use the production API
+            Customer   - Your customer ID
+            Key        - Your customer key
 
             The following fields are optional:
 
+            transport - A custom transport object.  Used mainly for testing and debugging; be warned, here be dragons
             Logo
         '''
         _validate(kwargs,
@@ -364,23 +383,26 @@ class Spoke(object):
 
     def new(self, **kwargs):
         '''
+            Creates a new order.  If there is a problem creating the order,
+            a SpokeError is raised.  Otherwise, a dictionary is returned.  The
+            returned dictionary is guaranteed to have an immc_id key-value pair,
+            which contains the Spoke ID for your order.  More key-value pairs may
+            be present, but they are not guaranteed and their presence may change
+            in successive versions of this module.  Any key-value pairs that appear
+            in this documentation, however, are guaranteed to appear in successive
+            versions, barring any changes in the Spoke API itself.
+
             The following fields are required:
 
-            OrderId
-            ShippingMethod
-            OrderInfo
-            Cases
+            OrderId         - An internal order ID
+            ShippingMethod  - The shipping method to use; must be one of 'FirstClass', 'PriorityMail', 'TrackedDelivery', 'SecondDay', 'Overnight'
+            OrderInfo       - An OrderInfo object
+            Cases           - A list of Case objects
 
             The following fields are optional:
 
-            PackSlip
-            Comments
-
-            Throws an exception if the parameters don't validate
-
-            Returns a dictionary of data.  It contains (at least) the following key-value pairs:
-
-            immc_id
+            PackSlip - A PackSlip object
+            Comments - A list of Comments objects
         '''
         shipping_method_map = dict(
             FirstClass      = 'FC',
@@ -410,7 +432,15 @@ class Spoke(object):
 
     def update(self, **kwargs):
         '''
-            Both OrderId and OrderInfo are required.
+            Updates an existing order.  If there is a problem
+            updating the order, a SpokeError is raised.  Otherwise,
+            a dictionary of key-value pairs of the same form as the
+            one returned by new is returned.
+
+            Required parameters:
+
+            OrderId
+            OrderInfo
         '''
         _validate(kwargs,
             OrderId   = Required(), # XXX number
@@ -427,8 +457,9 @@ class Spoke(object):
 
     def cancel(self, OrderId):
         '''
-            OrderId is the self-assigned order ID that corresponds
-            to your order.
+            Cancels an existing order.  If there is a problem,
+            raises a SpokeError.  Otherwise, returns a dictionary
+            of the same form as the one returned by new.
         '''
         request = self._generate_request(
             RequestType = 'Cancel',
