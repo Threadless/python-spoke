@@ -279,7 +279,7 @@ class Transport(object):
         self.url = url
 
     def send(self, request):
-        res = requests.post(url, data=request)
+        res = requests.post(self.url, data=request)
         res.raise_for_status()
         return res.content
 
