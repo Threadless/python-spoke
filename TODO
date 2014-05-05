@@ -1,4 +1,3 @@
-better tests
 test coverage
 voluptuous instead of hand-rolled validation
 break apart into different packages

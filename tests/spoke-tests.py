@@ -1,6 +1,8 @@
 import spoke
 import unittest
 from datetime import datetime
+import os
+import random
 
 CUSTOMER_NAME   = 'abc123'
 CUSTOMER_KEY    = 'abc123'
@@ -236,3 +238,71 @@ class SpokeTests(unittest.TestCase):
             Extra = 'foo',
         )
 
+    @unittest.skipUnless('SPOKE_CUSTOMER' in os.environ and 'SPOKE_KEY' in os.environ, 'Please set SPOKE_CUSTOMER and SPOKE_KEY for live testing')
+    def test_roundtrip(self):
+        customer = os.getenv('SPOKE_CUSTOMER')
+        key      = os.getenv('SPOKE_KEY')
+
+        sp = spoke.Spoke(
+            Customer   = customer,
+            Key        = key,
+            production = False,
+        )
+
+        order_id = random.randint(1000000, 2000000)
+
+        result = sp.new(
+            Cases = [dict(
+                CaseId     = 1234,
+                CaseType   = 'iph4tough',
+                PrintImage = dict(
+                    ImageType = 'jpg',
+                    Url       = 'http://threadless.com/nothing.jpg',
+                ),
+                Quantity = 1,
+            )],
+            OrderId   = order_id,
+            OrderInfo = dict(
+                Address1    = FAUX_ADDRESS,
+                City        = FAUX_CITY,
+                CountryCode = 'US',
+                FirstName   = FAUX_FIRST_NAME,
+                LastName    = FAUX_LAST_NAME,
+                OrderDate   = datetime.now(),
+                PhoneNumber = FAUXN_NUMBER,
+                PostalCode  = FAUX_ZIP,
+                State       = FAUX_STATE,
+            ),
+            ShippingMethod = 'FirstClass',
+            PackSlip       = spoke.Image(
+                ImageType = 'jpg',
+                Url       = 'file:///tmp/nothing.jpg',
+            ),
+            Comments = [dict(
+                Type        = 'Printer',
+                CommentText = 'testing',
+            )]
+        )
+
+        self.assertTrue('immc_id' in result)
+
+        result = sp.update(
+            OrderId = order_id,
+            OrderInfo = dict(
+                Address1    = FAUX_ADDRESS,
+                City        = FAUX_CITY,
+                CountryCode = 'US',
+                FirstName   = FAUX_FIRST_NAME,
+                LastName    = FAUX_LAST_NAME,
+                OrderDate   = datetime.now(),
+                PhoneNumber = FAUXN_NUMBER,
+                PostalCode  = FAUX_ZIP,
+                State       = FAUX_STATE,
+            ),
+        )
+
+        self.assertTrue('immc_id' in result)
+
+        result = sp.cancel(order_id)
+
+        self.assertTrue('immc_id' in result)
