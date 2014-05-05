@@ -189,10 +189,6 @@ result = s.new(
 )
 ```
 
-The documentation for the API itself can be found here:
-
-***API DOCS GO HERE***
-
 # Conventions
 
 Upper-case keyword arguments are passed directly to the API; lower-case ones
