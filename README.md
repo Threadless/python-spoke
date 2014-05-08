@@ -1,7 +1,9 @@
 # Spoke
 
 Spoke (formerly known as Case-Mate) is a company that makes cases for phones
-and tablets.  They are kind enough to expose an API for others to use, and
+and tablets (ed: among other things).  
+
+They are kind enough to expose an API for others to use, and
 this is a Python library that interacts with that API.  The API is XML-based (but
 not SOAP).  The structure of this library is meant to reflect the structure of the
 API calls and closely as possible; you should be able to read the API docs and use
@@ -105,7 +107,7 @@ API XML:
 </Order>
 </Request>
 ```
-    
+
 Equivalent Python Code:
 
 ```python
@@ -116,7 +118,7 @@ s = spoke.Spoke(
     Key='1234554321123450',
     Logo={
         'ImageType' : 'jpg',
-        'Url' : 'http://MyLogoImage.com/logo.jpg',
+        'Url' : 'http://threadless.com/logo.jpg',
     },
 )
 
