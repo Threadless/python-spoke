@@ -1,7 +1,7 @@
 # Spoke
 
 Spoke (formerly known as Case-Mate) is a company that makes cases for phones
-and tablets (ed: among other things).  
+and tablets (ed: among other things).
 
 They are kind enough to expose an API for others to use, and
 this is a Python library that interacts with that API.  The API is XML-based (but
@@ -10,7 +10,7 @@ API calls and closely as possible; you should be able to read the API docs and u
 this library comfortably.  Only parameters that do not change between requests are
 omitted from each call; for example:
 
-API XML:
+## Example API XML:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -108,7 +108,9 @@ API XML:
 </Request>
 ```
 
-Equivalent Python Code:
+## Equivalent Python Code:
+
+### Setup
 
 ```python
 import spoke
@@ -121,6 +123,8 @@ s = spoke.Spoke(
         'Url' : 'http://threadless.com/logo.jpg',
     },
 )
+
+### Create a new order:
 
 result = s.new(
     OrderId='CustomerOrderNumber',
@@ -189,6 +193,24 @@ result = s.new(
         }
     }]
 )
+```
+
+### Update shipping info:
+
+```python
+s.update(
+    OrderId='CustomerOrderNumber',
+    OrderInfo={
+        'FirstName': 'Bob',
+        # ...
+    }
+)
+```
+
+### Cancel an order:
+
+```python
+s.cancel('CustomerOrderNumber')
 ```
 
 # Conventions
