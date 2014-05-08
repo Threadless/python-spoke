@@ -288,8 +288,8 @@ ARRAY_CHILDREN_NAMES = dict(
     Comments = 'Comment',
 )
 
-PRODUCTION_URL = 'http://api.spokecustom.com/order/submit'
-STAGING_URL    = 'http://api-staging.spokecustom.com/order/submit'
+PRODUCTION_URL = 'https://api.spokecustom.com/order/submit'
+STAGING_URL    = 'https://api-staging.spokecustom.com/order/submit'
 
 class Spoke(object):
     '''
