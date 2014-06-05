@@ -3,6 +3,8 @@
     the included README for a higher level overview.
 '''
 
+import re
+
 from lxml import etree
 import requests
 
@@ -272,9 +274,22 @@ class Case(object):
 
 class SpokeError(Exception):
     '''
-        Represents an error received from the spoke API.
+    Represents an error received from the spoke API.
     '''
     pass
+
+
+class SpokeDuplicateOrder(SpokeError):
+    '''
+    Represents a duplicate order error returned from the Spoke API
+    '''
+
+
+ERROR_REGEX = [
+    (re.compile(r"duplicate orderid", re.I), SpokeDuplicateOrder),
+]
+
+
 
 class Transport(object):
     def __init__(self, url):
@@ -381,6 +396,9 @@ class Spoke(object):
             return dict(immc_id = immc_id)
         else:
             message = tree.xpath('//message')[0].text
+            for regex, exception_class in ERROR_REGEX:
+                if regex.match(message):
+                    raise exception_class(message)
             raise SpokeError(message)
 
     def new(self, **kwargs):
