@@ -6,6 +6,8 @@
 from lxml import etree
 import requests
 
+__version__ = '1.0.0'
+
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
 # Validation code
