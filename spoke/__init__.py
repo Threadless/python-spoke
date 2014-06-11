@@ -361,8 +361,12 @@ class Spoke(object):
             serializer = serializers[type(node)]
             return serializer(tag_name, node)
         else:
-            element      = etree.Element(tag_name)
-            element.text = str(node)
+            element = etree.Element(tag_name)
+
+            if not isinstance(node, basestring):
+                node = str(node)
+            element.text = node
+
             return element
 
     def _generate_request(self, RequestType, Order):
