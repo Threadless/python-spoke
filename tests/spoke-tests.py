@@ -1,3 +1,5 @@
+# vim: fileencoding=utf8
+
 import spoke
 import unittest
 from datetime import datetime
@@ -13,6 +15,11 @@ FAUX_LAST_NAME  = 'Ample'
 FAUXN_NUMBER    = '555 555 5555'
 FAUX_ZIP        = '12345'
 FAUX_STATE      = 'IL'
+
+UNICODE_FAUX_ADDRESS    = u'123 поддельная улица'
+UNICODE_FAUX_CITY       = u'Санкт-Петербург'
+UNICODE_FAUX_FIRST_NAME = u'Björn'
+UNICODE_FAUX_LAST_NAME  = u'Björnsson'
 
 class FauxTransport(object):
     def send(self, request):
@@ -403,3 +410,73 @@ class SpokeTests(unittest.TestCase):
         )
 
         sp.cancel(order_id)
+
+
+    @unittest.skipUnless('SPOKE_CUSTOMER' in os.environ and 'SPOKE_KEY' in os.environ, 'Please set SPOKE_CUSTOMER and SPOKE_KEY for live testing')
+    def test_unicode_roundtrip(self):
+        customer = os.getenv('SPOKE_CUSTOMER')
+        key      = os.getenv('SPOKE_KEY')
+
+        sp = spoke.Spoke(
+            Customer   = customer,
+            Key        = key,
+            production = False,
+        )
+
+        order_id = random.randint(1000000, 2000000)
+
+        result = sp.new(
+            Cases = [dict(
+                CaseId     = 1234,
+                CaseType   = 'iph4tough',
+                PrintImage = dict(
+                    ImageType = 'jpg',
+                    Url       = 'http://threadless.com/nothing.jpg',
+                ),
+                Quantity = 1,
+            )],
+            OrderId   = order_id,
+            OrderInfo = dict(
+                Address1    = UNICODE_FAUX_ADDRESS,
+                City        = UNICODE_FAUX_CITY,
+                CountryCode = 'RU',
+                FirstName   = UNICODE_FAUX_FIRST_NAME,
+                LastName    = UNICODE_FAUX_LAST_NAME,
+                OrderDate   = datetime.now(),
+                PhoneNumber = FAUXN_NUMBER,
+                PostalCode  = FAUX_ZIP,
+                State       = '-',
+            ),
+            ShippingMethod = 'FirstClass',
+            PackSlip       = spoke.Image(
+                ImageType = 'jpg',
+                Url       = 'file:///tmp/nothing.jpg',
+            ),
+            Comments = [dict(
+                Type        = 'Printer',
+                CommentText = 'testing',
+            )]
+        )
+
+        self.assertTrue('immc_id' in result)
+
+        result = sp.update(
+            OrderId = order_id,
+            OrderInfo = dict(
+                Address1    = UNICODE_FAUX_ADDRESS,
+                City        = UNICODE_FAUX_CITY,
+                CountryCode = 'RU',
+                FirstName   = UNICODE_FAUX_FIRST_NAME,
+                LastName    = UNICODE_FAUX_LAST_NAME,
+                OrderDate   = datetime.now(),
+                PhoneNumber = FAUXN_NUMBER,
+                PostalCode  = FAUX_ZIP,
+                State       = '-',
+            ),
+        )
+
+        self.assertTrue('immc_id' in result)
+
+        result = sp.cancel(order_id)
+
+        self.assertTrue('immc_id' in result)
