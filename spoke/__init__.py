@@ -258,7 +258,7 @@ class Case(object):
             CaseId         = Required(),
             CaseType       = Required(Enum('iph4bt', 'iph4tough', 'iph4vibe', 'iph3bt',
                 'iph3tough', 'ipt4gbt', 'bb9900bt', 'kindlefirebt', 'ssgs3vibe',
-                'iph5bt', 'iph5vibe', 'iph5cbt', 'iph5xtreme', 'ipad4bt', 'ipadminitough',
+                'iph5bt', 'iph5vibe', 'iph5cbt', 'iph5xtreme', 'iph6bt', 'iph6tough', 'ipad4bt', 'ipadminitough',
                 'ipt5gbt', 'ssgn2tough', 'bbz10tough', 'ssgs4bt', 'ssgs4vibe')),
             Quantity       = Required(),
             PrintImage     = Required(Image),
