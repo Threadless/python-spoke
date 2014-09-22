@@ -7,12 +7,17 @@ import re
 
 from lxml import etree
 import requests
+import six
 
-__version__ = '1.0.0'
+
+__version__ = '1.0.3'
+
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
+
 # Validation code
+
 
 class ValidationError(Exception):
     '''
@@ -363,7 +368,7 @@ class Spoke(object):
         else:
             element = etree.Element(tag_name)
 
-            if not isinstance(node, basestring):
+            if not isinstance(node, six.string_types):
                 node = str(node)
             element.text = node
 
