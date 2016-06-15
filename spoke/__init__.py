@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -256,7 +256,7 @@ class Case(object):
         '''
         _validate(kwargs,
             CaseId         = Required(),
-            CaseType       = Required(Enum('iph4bt', 'iph4tough', 'iph4vibe', 'iph3bt',
+            CaseType       = Required(Enum('iph4bt', 'iph4tough', 'iph4tough2', 'iph3bt',
                 'iph3tough', 'ipt4gbt', 'bb9900bt', 'kindlefirebt', 'ssgs3vibe',
                 'iph5bt', 'iph5vibe', 'iph5cbt', 'iph5xtreme', 'iph6bt', 
                 'iph6tough', 'iph655bt', 'iph655tough', 'ipad4bt', 'ipadminitough',
