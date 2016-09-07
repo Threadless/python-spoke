@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.5'
+__version__ = '1.0.6'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -262,7 +262,8 @@ class Case(object):
                 'iph6tough', 'iph655bt', 'iph655tough', 'ipad4bt', 'ipadminitough',
                 'ipt5gbt', 'ssgn2tough', 'bbz10tough', 'ssgs4bt', 'ssgs4vibe', 
                 'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'iph6sbtpresale',
-                'iph6stoughpresale', 'iph6splusbtpresale', 'iph6splustoughpresale')),
+                'iph6stoughpresale', 'iph6splusbtpresale', 'iph6splustoughpresale',
+                'iph7bt', 'iph7tough', 'iph7plusbt', 'iph7plustough')),
             Quantity       = Required(),
             PrintImage     = Required(Image),
             QcImage        = Optional(Image),
