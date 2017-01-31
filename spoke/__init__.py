@@ -301,7 +301,7 @@ class Case(object):
                 'iph5bt', 'iph5vibe', 'iph5cbt', 'iph5xtreme', 'iph6bt',
                 'iph6tough', 'iph655bt', 'iph655tough', 'ipad4bt', 'ipadminitough',
                 'ipt5gbt', 'ssgn2tough', 'bbz10tough', 'ssgs4bt', 'ssgs4vibe',
-                'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'iph6sbtpresale',
+                'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'ssgs7bt', 'iph6sbtpresale',
                 'iph6stoughpresale', 'iph6splusbtpresale', 'iph6splustoughpresale',
                 'iph7bt', 'iph7tough', 'iph7plusbt', 'iph7plustough',
                 'mug11oz', 'mug15oz', 'mug12ozlatte', 'mug15oztravel', 'journal5x7blank',
