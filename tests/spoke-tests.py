@@ -103,10 +103,54 @@ class SpokeTests(unittest.TestCase):
         for k in params.keys():
             copy = params.copy()
             del copy[k]
+            self.assertRaises(spoke.ValidationError, sp.new, **copy)
 
-            self.assertRaises(spoke.ValidationError, spoke.Spoke, **copy)
 
+    def test_conditionally_required_fields(self):
+        sp = spoke.Spoke(
+            Customer   = CUSTOMER_NAME,
+            Key        = CUSTOMER_KEY,
+            production = False,
+            transport  = FauxTransport(),
+        )
 
+        params = dict(
+            Cases = [dict(
+                CaseId     = 1234,
+                CaseType   = 'iph4tough',
+                PrintImage = dict(
+                    ImageType = 'jpg',
+                    Url       = 'http://threadless.com/nothing.jpg',
+                ),
+                Quantity = 1,
+            )],
+            OrderId   = 2,
+            OrderInfo = dict(
+                Address1    = FAUX_ADDRESS,
+                City        = FAUX_CITY,
+                CountryCode = 'US',
+                FirstName   = FAUX_FIRST_NAME,
+                LastName    = FAUX_LAST_NAME,
+                OrderDate   = datetime.now(),
+                PhoneNumber = FAUXN_NUMBER,
+                PostalCode  = FAUX_ZIP,
+                State       = FAUX_STATE,
+            ),
+            ShippingAccount  = '5110896',
+            ShippingMethodId = 66,
+        )
+
+        for k in params.keys():
+            copy = params.copy()
+            del copy[k]
+
+            self.assertRaises(spoke.ValidationError, sp.new, **copy)
+
+        del params['ShippingAccount']
+        del params['ShippingMethodId']
+        self.assertRaises(spoke.ValidationError, sp.new, **params)
+
+        
     def test_new_optional_fields(self):
         sp = spoke.Spoke(
             Customer   = CUSTOMER_NAME,
@@ -472,6 +516,77 @@ class SpokeTests(unittest.TestCase):
                 PhoneNumber = FAUXN_NUMBER,
                 PostalCode  = FAUX_ZIP,
                 State       = '-',
+            ),
+        )
+
+        self.assertTrue('immc_id' in result)
+
+        result = sp.cancel(order_id)
+
+        self.assertTrue('immc_id' in result)
+
+
+    @unittest.skipUnless('AS_SPOKE_CUSTOMER' in os.environ and 'AS_SPOKE_KEY' in os.environ, 'Please set AS_SPOKE_CUSTOMER and AS_SPOKE_KEY for live testing')
+    def test_roundtrip_artist_shop(self):
+        customer = os.getenv('AS_SPOKE_CUSTOMER')
+        key      = os.getenv('AS_SPOKE_KEY')
+
+        sp = spoke.Spoke(
+            Customer   = customer,
+            Key        = key,
+            production = False,
+        )
+
+        order_id = random.randint(1000000, 2000000)
+
+        result = sp.new(
+            Cases = [dict(
+                CaseId     = 1234,
+                CaseType   = 'iph4tough',
+                PrintImage = dict(
+                    ImageType = 'jpg',
+                    Url       = 'http://threadless.com/nothing.jpg',
+                ),
+                Quantity = 1,
+            )],
+            OrderId   = order_id,
+            OrderInfo = dict(
+                Address1    = FAUX_ADDRESS,
+                City        = FAUX_CITY,
+                CountryCode = 'US',
+                FirstName   = FAUX_FIRST_NAME,
+                LastName    = FAUX_LAST_NAME,
+                OrderDate   = datetime.now(),
+                PhoneNumber = FAUXN_NUMBER,
+                PostalCode  = FAUX_ZIP,
+                State       = FAUX_STATE,
+            ),
+            ShippingMethodId = 66,
+            ShippingAccount  = '5110896',
+            PackSlip         = spoke.Image(
+                ImageType = 'jpg',
+                Url       = 'file:///tmp/nothing.jpg',
+            ),
+            Comments = [dict(
+                Type        = 'Printer',
+                CommentText = 'testing',
+            )]
+        )
+
+        self.assertTrue('immc_id' in result)
+
+        result = sp.update(
+            OrderId = order_id,
+            OrderInfo = dict(
+                Address1    = FAUX_ADDRESS,
+                City        = FAUX_CITY,
+                CountryCode = 'US',
+                FirstName   = FAUX_FIRST_NAME,
+                LastName    = FAUX_LAST_NAME,
+                OrderDate   = datetime.now(),
+                PhoneNumber = FAUXN_NUMBER,
+                PostalCode  = FAUX_ZIP,
+                State       = FAUX_STATE,
             ),
         )
 

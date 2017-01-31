@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.7'
+__version__ = '1.0.8'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -27,6 +27,7 @@ def passthrough(v):
 
 class Validator(object):
     is_required = True
+    is_conditional = False
 
     def __init__(self, inner=None):
         if inner is None:
@@ -51,6 +52,35 @@ class Validator(object):
 class Required(Validator):
     pass
 
+class RequiredOnlyIfNot(Required):
+    """ This validator will require the key ONLY IF other keys are NOT present in 
+    the payload.
+
+    This validator was added because threadless.com payloads use "ShippingMethod" whereas
+    Artist Shops payloads use "ShippingAccount" and "ShippingMethodId"
+
+    An example would be that SomeKey is only required if SomeOtherKey is not present in the payload:
+    "SomeKey" = RequiredOnlyIfNot(['SomeOtherKey'])
+
+    """
+    is_required = True
+    is_conditional = True
+    other_keys = []
+
+    def __init__(self, other_keys=[], inner=None):
+        if not isinstance(other_keys, (tuple, list)):
+            other_keys = [other_keys]
+        self.other_keys = other_keys
+
+        super(RequiredOnlyIfNot, self).__init__(inner)
+
+    def __call__(self, value, d):
+        # if all of other_keys are present in the payload,
+        # then require don't require this field
+        if all([key in d.keys() for key in self.other_keys]):
+            self.is_required = False
+
+        return super(RequiredOnlyIfNot, self).__call__(value)
 
 class Optional(Validator):
     is_required = False
@@ -81,7 +111,17 @@ def _validate(d, **validation_spec):
         validator = validation_spec.pop(k, None)
         if validator is None:
             raise ValidationError('parameter "%s" not allowed' % k)
-        d[k] = validator(v)
+        if validator.is_conditional: # conditional validators need the whole dictionary to look at other keys
+            d[k] = validator(v, d)
+        else:
+            d[k] = validator(v)
+
+    # it's possible that there's some conditional validators still in the validation_spec
+    # because their corresponding key isn't in the payload, so look over them and if all 
+    # of their other_keys are present in the payload, then this conditional validator isn't required
+    for k, v in validation_spec.items():
+        if v.is_conditional and all([key in d.keys() for key in v.other_keys]):
+            v.is_required = False
 
     validation_spec = dict((k, v) for k, v in validation_spec.items() if v.is_required)
     if validation_spec:
@@ -442,14 +482,17 @@ class Spoke(object):
             Overnight       = 'ON',
         )
         _validate(kwargs,
-            OrderId        = Required(), # XXX number
-            ShippingMethod = Required(Enum('FirstClass', 'PriorityMail', 'TrackedDelivery', 'SecondDay', 'Overnight')),
-            PackSlip       = Optional(Image),
-            Comments       = Optional(Array(Comment)),
-            OrderInfo      = Required(OrderInfo),
-            Cases          = Required(Array(Case)),
+            OrderId          = Required(), # XXX number
+            ShippingMethod   = RequiredOnlyIfNot(['ShippingAccount', 'ShippingMethodId'], Enum('FirstClass', 'PriorityMail', 'TrackedDelivery', 'SecondDay', 'Overnight')),
+            ShippingMethodId = RequiredOnlyIfNot(['ShippingMethod']),
+            ShippingAccount  = RequiredOnlyIfNot(['ShippingMethod']),
+            PackSlip         = Optional(Image),
+            Comments         = Optional(Array(Comment)),
+            OrderInfo        = Required(OrderInfo),
+            Cases            = Required(Array(Case)),
         )
-        kwargs['ShippingMethod'] = shipping_method_map[ kwargs['ShippingMethod'] ]
+        if "ShippingMethod" in kwargs:
+            kwargs['ShippingMethod'] = shipping_method_map[ kwargs['ShippingMethod'] ]
         # XXX OrderDate (date or datetime?)
 
         request = self._generate_request(
