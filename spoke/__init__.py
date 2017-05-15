@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.9'
+__version__ = '1.0.10'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -305,7 +305,7 @@ class Case(object):
                 'iph6stoughpresale', 'iph6splusbtpresale', 'iph6splustoughpresale',
                 'iph7bt', 'iph7tough', 'iph7plusbt', 'iph7plustough',
                 'mug11oz', 'mug15oz', 'mug12ozlatte', 'mug15oztravel', 'journal5x7blank',
-                'journal5x7ruled', 'spiral6x8ruled')),
+                'journal5x7ruled', 'spiral6x8ruled', 'ssgs8bt')),
             Quantity       = Required(),
             PrintImage     = Required(Image),
             QcImage        = Optional(Image),
