@@ -305,7 +305,7 @@ class Case(object):
                 'iph6stoughpresale', 'iph6splusbtpresale', 'iph6splustoughpresale',
                 'iph7bt', 'iph7tough', 'iph7plusbt', 'iph7plustough',
                 'mug11oz', 'mug15oz', 'mug12ozlatte', 'mug15oztravel', 'journal5x7blank',
-                'journal5x7ruled', 'spiral6x8ruled', 'ssgs8bt', 'iph8bt', 'iph8tough',)),
+                'journal5x7ruled', 'spiral6x8ruled', 'ssgs8bt', 'iph8bt', 'iph8tough')),
             Quantity       = Required(),
             PrintImage     = Required(Image),
             QcImage        = Optional(Image),
