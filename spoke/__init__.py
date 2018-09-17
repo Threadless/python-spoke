@@ -296,17 +296,29 @@ class Case(object):
         '''
         _validate(kwargs,
             CaseId         = Required(),
-            CaseType       = Required(Enum('iph4bt', 'iph4tough', 'iph4tough2', 'iph3bt',
-                'iph3tough', 'ipt4gbt', 'bb9900bt', 'kindlefirebt', 'ssgs3vibe',
-                'iph5bt', 'iph5vibe', 'iph5cbt', 'iph5xtreme', 'iph6bt',
-                'iph6tough', 'iph655bt', 'iph655tough', 'ipad4bt', 'ipadminitough',
-                'ipt5gbt', 'ssgn2tough', 'bbz10tough', 'ssgs4bt', 'ssgs4vibe',
-                'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'ssgs7bt', 'iph6sbtpresale',
-                'iph6stoughpresale', 'iph6splusbtpresale', 'iph6splustoughpresale',
-                'iph7bt', 'iph7tough', 'iph7plusbt', 'iph7plustough',
-                'mug11oz', 'mug15oz', 'mug12ozlatte', 'mug15oztravel', 'journal5x7blank',
-                'journal5x7ruled', 'spiral6x8ruled', 'ssgs8bt', 'iph8bt', 'iph8tough',
-                'iph10bt', 'iph10tough', 'iphxsmaxbt', 'iphxsmaxtough', 'iphxrbt', 'iphxrtough')),
+            CaseType       = Required(Enum(
+                'bb9900bt', 'bbz10tough', 'kindlefirebt',
+                # apple / iphone
+                'iph3bt', 'iph3tough', 'iph4bt', 'iph4tough', 'iph4tough2', 
+                'ipt4gbt',  'iph5bt', 'iph5vibe', 'iph5cbt', 'ipt5gbt', 
+                'iph5xtreme', 'iph6bt', 'iph6tough', 'iph655bt', 'iph655tough',
+                'ipad4bt', 'ipadminitough', 'iph6sbtpresale', 
+                'iph6stoughpresale', 'iph6splusbtpresale', 
+                'iph6splustoughpresale', 'iph7bt', 'iph7tough', 'iph7plusbt',
+                'iph7plustough', 'iph8bt', 'iph8tough', 'iph10bt', 
+                'iph10tough', 'iphxsmaxbt', 'iphxsmaxtough', 'iphxrbt', 
+                'iphxrtough',
+                # samsung / galaxy
+                'ssgn2tough', 'ssgs3vibe', 'ssgs4bt', 'ssgs4vibe',
+                'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'ssgs7bt', 'ssgs8bt',
+                # mugs
+                'mug11oz', 'mug15oz', 'mug12ozlatte', 'mug15oztravel', 
+                # notebooks
+                'journal5x7blank', 'journal5x7ruled', 'spiral6x8ruled',  
+                # stickers
+                '2x2-white', '3x3-white', '4x4-white', '6x6-white',
+                '2x2-clear', '3x3-clear', '4x4-clear', '6x6-clear',
+                )),
             Quantity       = Required(),
             PrintImage     = Required(Image),
             QcImage        = Optional(Image),
