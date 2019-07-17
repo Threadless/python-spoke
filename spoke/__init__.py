@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.15'
+__version__ = '1.0.16'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -311,6 +311,8 @@ class Case(object):
                 # samsung / galaxy
                 'ssgn2tough', 'ssgs3vibe', 'ssgs4bt', 'ssgs4vibe',
                 'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'ssgs7bt', 'ssgs8bt',
+                # magnets
+                '3x3-magnet', '4x4-magnet', '6x6-magnet',
                 # mugs
                 'mug11oz', 'mug15oz', 'mug12ozlatte', 'mug15oztravel', 
                 # notebooks
