@@ -311,6 +311,8 @@ class Case(object):
                 # samsung / galaxy
                 'ssgn2tough', 'ssgs3vibe', 'ssgs4bt', 'ssgs4vibe',
                 'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'ssgs7bt', 'ssgs8bt',
+                # magnets
+                '3x3-magnet', '4x4-magnet', '6x6-magnet',
                 # mugs
                 'mug11oz', 'mug15oz', 'mug12ozlatte', 'mug15oztravel', 
                 # notebooks
