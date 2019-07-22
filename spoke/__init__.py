@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.16'
+__version__ = '1.0.17'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -308,6 +308,8 @@ class Case(object):
                 'iph7plustough', 'iph8bt', 'iph8tough', 'iph10bt', 
                 'iph10tough', 'iphxsmaxbt', 'iphxsmaxtough', 'iphxrbt', 
                 'iphxrtough',
+                # buttons
+                'button-round-125', 'button-round-225',
                 # samsung / galaxy
                 'ssgn2tough', 'ssgs3vibe', 'ssgs4bt', 'ssgs4vibe',
                 'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'ssgs7bt', 'ssgs8bt',
