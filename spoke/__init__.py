@@ -308,6 +308,8 @@ class Case(object):
                 'iph7plustough', 'iph8bt', 'iph8tough', 'iph10bt', 
                 'iph10tough', 'iphxsmaxbt', 'iphxsmaxtough', 'iphxrbt', 
                 'iphxrtough',
+                # buttons
+                'button-round-125', 'button-round-225',
                 # samsung / galaxy
                 'ssgn2tough', 'ssgs3vibe', 'ssgs4bt', 'ssgs4vibe',
                 'ssgs5bt', 'ssgn4bt', 'ssgs6vibe', 'ssgs6bt', 'ssgs7bt', 'ssgs8bt',
