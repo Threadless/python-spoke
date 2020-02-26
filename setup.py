@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name             = 'Python-Spoke',
-    version          = '1.0.19',
+    version          = '1.0.20',
     packages         = find_packages(),
     description      = 'API bindings for Spoke API',
     long_description = open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r').read(),
