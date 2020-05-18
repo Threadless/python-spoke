@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.20'
+__version__ = '1.0.21'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -325,6 +325,8 @@ class Case(object):
                 '2x2-clear', '3x3-clear', '4x4-clear', '6x6-clear',
                 # socks
                 'sock-small', 'sock-medium', 'sock-large',
+                # face masks
+                'facemasksmall', 'facemasklarge',
                 )),
             Quantity       = Required(),
             PrintImage     = Required(Image),
