@@ -12,6 +12,6 @@ setup(
     author_email     = 'rob.hoelz@skinnycorp.com',
     url              = 'https://github.com/Threadless/python-spoke',
     keywords         = 'spoke',
-    install_requires = ['lxml==3.3.5', 'requests==2.20.0'],
+    install_requires = ['lxml==4.6.3', 'requests==2.20.0'],
     tests_require    = ['nose==1.3.1', 'python-termstyle==0.1.10', 'rednose==0.4.1'],
 )
