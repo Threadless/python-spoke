@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.25'
+__version__ = '1.0.26'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -335,6 +335,8 @@ class Case(object):
                 'facemasksmall', 'facemasklarge',
                 # puzzles
                 '8x10-puzzle', '11x14-puzzle', '16x20-puzzle',
+                # mouse pad / desk mat
+                '9x7mousepad', 'smallmat', 'largemat', 'xlargemat',
                 )),
             Quantity       = Required(),
             PrintImage     = Required(Image),
