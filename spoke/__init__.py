@@ -8,7 +8,7 @@ import re
 from lxml import etree
 import requests
 
-__version__ = '1.0.26'
+__version__ = '1.0.27'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -315,6 +315,14 @@ class Case(object):
                 'iph13probt', 'iph13protough', 'iph13promaxbt', 'iph13promaxtough',
                 'iph14snapps', 'iph14prosnapps', 'iph14plussnapps', 'iph14promaxsnapps',
                 'iph14toughps', 'iph14protoughps', 'iph14plustoughps', 'iph14promaxtoughps',
+                'SP10599', # iphone 15 slim
+                'SP10603', # iphone 15 tough
+                'SP10601', # iphone 15 plus slim
+                'SP10605', # iphone 15 plus tough
+                'SP10600', # iphone 15 pro slim
+                'SP10604', # iphone 15 pro tough
+                'SP10602', # iphone 15 pro max slim
+                'SP10606', # iphone 15 pro max tough
                 # buttons
                 'button-round-125', 'button-round-225',
                 # samsung / galaxy
