@@ -7,8 +7,9 @@ import re
 
 from lxml import etree
 import requests
+import six
 
-__version__ = '1.0.27'
+__version__ = '1.0.28'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -449,7 +450,7 @@ class Spoke(object):
         else:
             element = etree.Element(tag_name)
 
-            if not isinstance(node, basestring):
+            if not isinstance(node, str):
                 node = str(node)
             element.text = node
 
@@ -474,11 +475,11 @@ class Spoke(object):
             Key         = self.Key,
             Order       = Order,
         ))
-        return etree.tostring(request, pretty_print=True)
+        return etree.tostring(request, encoding='utf-8', pretty_print=True)
 
     def _send_request(self, request):
         res    = self.transport.send(request)
-        tree   = etree.fromstring(res)
+        tree   = etree.fromstring(res.decode('utf-8'))
         result = tree.xpath('//result')[0].text
 
         if result == 'Success':

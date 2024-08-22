@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name             = 'Python-Spoke',
-    version          = '1.0.27',
+    version          = '1.0.28',
     packages         = find_packages(),
     description      = 'API bindings for Spoke API',
     long_description = open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r').read(),
@@ -12,6 +12,6 @@ setup(
     author_email     = 'rob.hoelz@skinnycorp.com',
     url              = 'https://github.com/Threadless/python-spoke',
     keywords         = 'spoke',
-    install_requires = ['lxml==3.3.5', 'requests==2.20.0'],
-    tests_require    = ['nose==1.3.1', 'python-termstyle==0.1.10', 'rednose==0.4.1'],
+    install_requires = ['lxml==4.9.3', 'requests==2.27.0'],
+    tests_require    = ['nose==1.3.7', 'rednose==1.3.0'],
 )
