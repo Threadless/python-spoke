@@ -9,7 +9,7 @@ from lxml import etree
 import requests
 import six
 
-__version__ = '1.0.29'
+__version__ = '1.0.30'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
@@ -332,6 +332,14 @@ class Case(object):
                 'SP10630', # iphone 16 pro tough
                 'SP10628', # iphone 16 pro max slim
                 'SP10632', # iphone 16 pro max tough
+                'SP10803', # iphone 17 slim
+                'SP10815', # iphone 17 tough
+                'SP10812', # iphone 17 pro slim
+                'SP10824', # iphone 17 pro tough
+                'SP10809', # iphone 17 pro max slim
+                'SP10821', # iphone 17 pro max tough
+                'SP10806', # iphone 17 air slim
+                'SP10818', # iphone 17 air tough
                 # buttons
                 'button-round-125', 'button-round-225',
                 # samsung / galaxy
