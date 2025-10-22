@@ -9,7 +9,7 @@ from lxml import etree
 import requests
 import six
 
-__version__ = '1.0.30'
+__version__ = '1.0.31'
 
 __all__ = ['Case', 'Comment', 'Image', 'OrderInfo', 'PackSlipCustomInfo', 'Spoke', 'ValidationError', 'SpokeError']
 
